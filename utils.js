@@ -1,7 +1,24 @@
 const fetch = require('node-fetch');
 const cheerio = require("cheerio");
 
-async function getMedia({ movies, tvShows }) {
+function getMediaItemDetails(item, $) {
+    const itemATag = $($(item).find('.film-detail')).find('.film-name').find('a');
+    const itemName = itemATag.text();
+    const itemLink = itemATag.attr("href").slice(1);
+    const itemImage = $($(item).find(".film-poster")).find('img').attr('data-src');
+    const itemReleaseDate = $($(item).find('.film-detail')).find('.fd-infor').find('.fdi-item').text().slice(0, 4);
+    const itemDuration = $($(item).find('.film-detail')).find('.fd-infor').find('.fdi-duration').text();
+
+    return {
+        id: itemLink,
+        title: itemName,
+        image: itemImage,
+        releaseDate: itemReleaseDate,
+        duration: itemDuration
+    }
+}
+
+async function getTrendingMedia({ movies, tvShows }) {
     const response = await fetch('https://flixhd.cc/');
     const data = await response.text();
     const $ = cheerio.load(data);
@@ -17,26 +34,39 @@ async function getMedia({ movies, tvShows }) {
     }
 
     mediaScrapeArr.find('.flw-item').each((i, el) => {
-        const filmItem = $(el);
-        const filmATag = $($(filmItem).find('.film-detail')).find('.film-name').find('a');
-        const filmName = filmATag.text();
-        const filmLink = filmATag.attr("href").slice(1);
-        const filmImage = $($(filmItem).find(".film-poster")).find('img').attr('data-src');
-        const filmReleaseDate = $($(filmItem).find('.film-detail')).find('.fd-infor').find('.fdi-item').text().slice(0, 4);
-        const filmDuration = $($(filmItem).find('.film-detail')).find('.fd-infor').find('.fdi-duration').text();
+        const mediaItem = $(el);
+        media.push(getMediaItemDetails(mediaItem, $));
+    });
 
-        media.push({
-            id: filmLink,
-            title: filmName,
-            image: filmImage,
-            releaseDate: filmReleaseDate,
-            duration: filmDuration
-        });
+    return media;
+}
+
+async function getLatestMedia({ movies, tvShows }) {
+    const response = await fetch('https://flixhd.cc/');
+    const data = await response.text();
+    const $ = cheerio.load(data);
+
+    let latestDiv;
+    let media = [];
+
+    if (movies) {
+        latestDiv = $("h2:contains('Latest Movies')");
+    }
+    else if (tvShows) {
+        latestDiv = $("h2:contains('Latest TV Shows')");
+    }
+
+    const mediaListDiv = $(latestDiv.parent().parent().siblings()[0]).find('.film_list-wrap');
+
+    mediaListDiv.find('.flw-item').each((i, el) => {
+        const mediaItem = $(el);
+        media.push(getMediaItemDetails(mediaItem, $));
     });
 
     return media;
 }
 
 module.exports = {
-    getMedia: getMedia
+    getTrendingMedia: getTrendingMedia,
+    getLatestMedia: getLatestMedia
 }
