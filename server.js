@@ -3,6 +3,7 @@ const { getMedia } = require('./utils');
 
 const app = express();
 const server = require("http").Server(app);
+const port = process.env.PORT || 3001;
 
 app.get("/get-trending-films", async (req, res) => {
     const trendingFilms = await getMedia({ movies: true })
@@ -14,4 +15,4 @@ app.get("/get-trending-tv-shows", async (req, res) => {
     res.json({ "trendingTvShows": trendingTvShows })
 })
 
-server.listen(3000);
+server.listen(port);
