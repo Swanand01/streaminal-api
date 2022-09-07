@@ -1,7 +1,10 @@
 const express = require('express');
 const { getTrendingMedia, getLatestMedia } = require('./utils');
+const cors = require('cors')
 
 const app = express();
+app.use(cors())
+
 const server = require("http").Server(app);
 const port = process.env.PORT || 3000;
 
