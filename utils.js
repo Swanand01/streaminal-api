@@ -14,7 +14,8 @@ function getMediaItemDetails(item, $, type) {
         title: itemName,
         image: itemImage,
         releaseDate: itemReleaseDate,
-        duration: itemDuration
+        duration: itemDuration,
+        type: type
     }
 }
 
