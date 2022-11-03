@@ -39,7 +39,7 @@ async function getTrendingMedia({ movies, tvShows }) {
 
     mediaScrapeArr.find('.flw-item').each((i, el) => {
         const mediaItem = $(el);
-        media.push(getMediaItemDetails(mediaItem, $));
+        media.push(getMediaItemDetails(mediaItem, $, type));
     });
 
     return media;
