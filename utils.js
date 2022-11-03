@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const cheerio = require("cheerio");
 
-function getMediaItemDetails(item, $) {
+function getMediaItemDetails(item, $, type) {
     const itemATag = $($(item).find('.film-detail')).find('.film-name').find('a');
     const itemName = itemATag.text();
     const itemLink = itemATag.attr("href").slice(1);
@@ -25,12 +25,15 @@ async function getTrendingMedia({ movies, tvShows }) {
 
     let media = [];
     let mediaScrapeArr = [];
+    let type;
 
     if (movies) {
         mediaScrapeArr = $("#trending-movies").find(".film_list-wrap");
+        type = "Movie";
     }
     else if (tvShows) {
         mediaScrapeArr = $("#trending-tv").find(".film_list-wrap");
+        type = "TV Series";
     }
 
     mediaScrapeArr.find('.flw-item').each((i, el) => {
@@ -48,19 +51,22 @@ async function getLatestMedia({ movies, tvShows }) {
 
     let latestDiv;
     let media = [];
+    let type;
 
     if (movies) {
         latestDiv = $("h2:contains('Latest Movies')");
+        type = "Movie";
     }
     else if (tvShows) {
         latestDiv = $("h2:contains('Latest TV Shows')");
+        type = "TV Series";
     }
 
     const mediaListDiv = $(latestDiv.parent().parent().siblings()[0]).find('.film_list-wrap');
 
     mediaListDiv.find('.flw-item').each((i, el) => {
         const mediaItem = $(el);
-        media.push(getMediaItemDetails(mediaItem, $));
+        media.push(getMediaItemDetails(mediaItem, $, type));
     });
 
     return media;
