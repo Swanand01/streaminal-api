@@ -22,7 +22,7 @@ function caching(req, res, next) {
     url = url.slice(1);
 
     if (cache[url] && Object.keys(cache[url]).length > 0) {
-        console.log("USING CACHE", url);
+        console.log("USING CACHE", cache[url]);
         let diff = Date.now() - cache[url].timestamp;
         if (diff / 3600000 < 1) {
             res.json({ [REQ_RES[url]]: cache[url].data });
