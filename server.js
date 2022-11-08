@@ -40,7 +40,6 @@ app.get("/get-trending-movies", async (req, res) => {
     res.json({ "trendingMovies": trendingMovies });
 
     console.log("SCRAPING TRENDING MOVIES");
-    console.log(trendingMovies);
 
     cache["get-trending-movies"] = {
         timestamp: Date.now(),
@@ -53,7 +52,6 @@ app.get("/get-trending-tv-shows", async (req, res) => {
     res.json({ "trendingTvShows": trendingTvShows });
 
     console.log("SCRAPING TRENDING SHOWS");
-    console.log(trendingTvShows);
 
     cache["get-trending-tv-shows"] = {
         timestamp: Date.now(),
@@ -66,7 +64,6 @@ app.get("/get-latest-movies", async (req, res) => {
     res.json({ "latestMovies": latestMovies });
 
     console.log("SCRAPING LATEST MOVIES");
-    console.log(latestMovies);
 
     cache["get-latest-movies"] = {
         timestamp: Date.now(),
@@ -79,7 +76,6 @@ app.get("/get-latest-tv-shows", async (req, res) => {
     res.json({ "latestTvShows": latestTvShows });
 
     console.log("SCRAPING LATEST TV SHOWS");
-    console.log(latestTvShows);
 
     cache["get-latest-tv-shows"] = {
         timestamp: Date.now(),
