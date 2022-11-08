@@ -21,7 +21,7 @@ function caching(req, res, next) {
     let url = req.url;
     url = url.slice(1);
 
-    if (cache[url]) {
+    if (cache[url] && Object.keys(cache[url]).length > 0) {
         let diff = Date.now() - cache[url].timestamp;
         if (diff / 3600000 < 1) {
             res.json({ [REQ_RES[url]]: cache[url].data });
