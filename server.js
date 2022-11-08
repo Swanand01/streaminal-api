@@ -22,6 +22,7 @@ function caching(req, res, next) {
     url = url.slice(1);
 
     if (cache[url] && Object.keys(cache[url]).length > 0) {
+        console.log("USING CACHE", url);
         let diff = Date.now() - cache[url].timestamp;
         if (diff / 3600000 < 1) {
             res.json({ [REQ_RES[url]]: cache[url].data });
@@ -38,6 +39,9 @@ app.get("/get-trending-movies", async (req, res) => {
     const trendingMovies = await getTrendingMedia({ movies: true });
     res.json({ "trendingMovies": trendingMovies });
 
+    console.log("SCRAPING TRENDING MOVIES");
+    console.log(trendingMovies);
+
     cache["get-trending-movies"] = {
         timestamp: Date.now(),
         data: trendingMovies
@@ -47,6 +51,9 @@ app.get("/get-trending-movies", async (req, res) => {
 app.get("/get-trending-tv-shows", async (req, res) => {
     const trendingTvShows = await getTrendingMedia({ tvShows: true });
     res.json({ "trendingTvShows": trendingTvShows });
+
+    console.log("SCRAPING TRENDING SHOWS");
+    console.log(trendingTvShows);
 
     cache["get-trending-tv-shows"] = {
         timestamp: Date.now(),
@@ -58,6 +65,9 @@ app.get("/get-latest-movies", async (req, res) => {
     const latestMovies = await getLatestMedia({ movies: true });
     res.json({ "latestMovies": latestMovies });
 
+    console.log("SCRAPING LATEST MOVIES");
+    console.log(latestMovies);
+
     cache["get-latest-movies"] = {
         timestamp: Date.now(),
         data: latestMovies
@@ -67,6 +77,9 @@ app.get("/get-latest-movies", async (req, res) => {
 app.get("/get-latest-tv-shows", async (req, res) => {
     const latestTvShows = await getLatestMedia({ tvShows: true });
     res.json({ "latestTvShows": latestTvShows });
+
+    console.log("SCRAPING LATEST TV SHOWS");
+    console.log(latestTvShows);
 
     cache["get-latest-tv-shows"] = {
         timestamp: Date.now(),
